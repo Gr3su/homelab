@@ -1,0 +1,41 @@
+services:
+  nextcloud-app:
+    container_name: nextcloud-app
+    image: nextcloud
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_APP_HTML_VOL}:/var/www/html
+      - ${NEXTCLOUD_APP_FTP_VOL}:/ftp
+      - ${NEXTCLOUD_APP_ERRORLOGS_VOL}:/errorLogs
+    environment:
+      - MYSQL_PASSWORD=${NEXTCLOUD_APP_PASSWORD}
+      - MYSQL_DATABASE=${NEXTCLOUD_APP_DATABASE}
+      - MYSQL_USER=${NEXTCLOUD_APP_USER}
+      - MYSQL_HOST=${NEXTCLOUD_APP_HOST}
+    networks:
+      - reverse-proxy
+      - backend
+
+  nextcloud-db:
+    container_name: nextcloud-db
+    image: mariadb
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - ${NEXTCLOUD_DB_DB_VOL}:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_DB_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
+      - MYSQL_DATABASE=${NEXTCLOUD_DB_DATABASE}
+      - MYSQL_USER=${NEXTCLOUD_DB_USER}
+    networks:
+      - backend
+
+volumes:
+  nextcloud-data:
+  nextcloud-db:
+
+networks:
+  reverse-proxy:
+    external: true
+  backend: null
