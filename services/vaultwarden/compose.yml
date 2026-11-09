@@ -1,0 +1,17 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      - DOMAIN=${VW_DOMAIN}
+      - SIGNUPS_ALLOWED=false
+    volumes:
+      - ${VW_DATA_VOL}:/data/
+    networks:
+      - vaultwarden-internal
+      - reverse-proxy
+networks:
+  vaultwarden-internal: null
+  reverse-proxy:
+    external: true
