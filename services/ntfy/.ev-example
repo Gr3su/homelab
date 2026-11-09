@@ -1,0 +1,8 @@
+NTFY_UID=
+NTFY_GID=
+
+NTFY_CACHE_VOL=
+NTFY_NTFY_VOL=
+
+NTFY_DOMAIN=http://ntfy.example.com
+NTFY_PORT=
